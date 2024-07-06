@@ -1,0 +1,13 @@
+.idea
+__pycache__
+*.sqlite3
+venv
+.directory
+media
+.DS_Store
+*.json
+test-pytest.features.*
+geckodriver.log
+.pytest_cache
+.cachetest-pytest.features.*
+.cache

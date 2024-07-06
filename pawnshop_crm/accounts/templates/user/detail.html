@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Lombard CRM
+{% endblock %}
+
+{% block heading %}
+Добавление аккаунта
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <a href="{% url 'accounts:create' %}" class="btn btn-dark btn-sm control-button">+ Добавить сотрудника</a>
+</div>
+{% endblock %}

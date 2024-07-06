@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+{% block heading %}
+    Добавить категорию
+{% endblock %}
+
+{% block content %}
+    <div class="form-wrapper">
+        <form action="{% url 'pawnshop:category_forms' %}" method="post" class="form">
+            {% csrf_token %}
+            <input type="text" name="numbers_of_page" value="2">
+            <input type="text" name="numbers_of_page1" value="1">
+            <div class="form-group">
+                <button class="btn btn-dark btn-sm" type="submit">Зарегистрировать пользователя</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

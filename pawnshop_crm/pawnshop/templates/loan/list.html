@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+{% block heading %}
+    Список кредитов
+{% endblock %}
+
+{% block content %}
+{% if perms.accounts.add_loan %}
+    <div class="d-flex justify-content-center">
+        <a href="{% url 'pawnshop:client_create' %}" class="btn btn-dark btn-sm control-button ">Добавить операцию</a>
+    </div>
+{% endif %}
+    <table class="table table-hover mt-4 display" id="data_table">
+        <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Клиент</th>
+            <th scope="col">Дата выдачи</th>
+            <th scope="col">Срок выдачи</th>
+            <th scope="col">Дата возврата</th>
+            <th scope="col">Сумма кредита</th>
+            <th scope="col">Процентная ставка</th>
+            <th scope="col">Статус</th>
+            <!--<td><th scope="col">Кем выдан</th>-->
+            <th scope="col">Операции</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for loan in loans %}
+            <tr>
+                <td>{{ loan.id }}</td>
+                <td>{{ loan.client.first_name }} {{ loan.client.last_name }}</td>
+                <td>{{ loan.created_at|date:'d.m.Y' }}</td>
+                <td>{{ loan.duration }}</td>
+                <td>{{ loan.date_of_expire|date:'d.m.Y' }}</td>
+                <td>{{ loan.total_amount|floatformat:0 }}</td>
+                <td>{{ loan.pledge_items.first.category.interest_rate }} %</td>
+                <td>{{ loan.status }}</td>
+                <!--<td>Сотрудник</td>-->
+                <td><a href="{% url 'pawnshop:loan_detail' loan.pk %}" class="btn btn-dark btn-sm">Детали</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="10">
+                    <div class="no-content">
+                        <p class="no-content-text">Нет активных кредитов</p>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

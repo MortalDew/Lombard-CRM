@@ -1,0 +1,79 @@
+<script>
+    let maxDepth = 0;
+
+    document.querySelector('#id_category').addEventListener('change', function (event) {
+        const categoryPk = event.target.value;
+        if (categoryPk !== '') {
+            const url = '{% url 'pawnshop:subcategory_list_ajax' %}' + '?category_pk=' + categoryPk;
+            sendAjaxRequest(url);
+        }
+        else
+            clearSubcategoryFields(0);
+    });
+
+    function sendAjaxRequest (url) {
+        fetch(url).then(function (response) {
+            if (response.ok)
+                return response.json()
+        }).then(function (response) {
+            if (response.subcategories.length !== 0)
+                createSubcategoryField(response);
+            else
+                clearSubcategoryFields(response.depth);
+        });
+    }
+
+    function createSubcategoryField (response) {
+        if (response.depth > maxDepth){
+            clearSubcategoryFields(response.depth);
+            maxDepth = response.depth;
+        }
+        else if (response.depth <= maxDepth) {
+            clearSubcategoryFields(response.depth);
+            maxDepth = response.depth;
+        }
+
+        const subcategoryField = document.createElement('div');
+        subcategoryField.classList.add('form-group', 'fade-in', 'form-group-' + response.depth);
+        subcategoryField.innerHTML = `
+            <label for="id_subcategory">Подкатегория<span class="required-indicator"> *</span></label>
+            <select name="subcategory" required data-depth="${response.depth}" class="form-control">
+                <option value="-1" selected>Добавить подкатегорию</option>
+                <option value="" selected>Выберите подкатегорию</option>
+            </select>
+        `;
+        document.querySelector('.subcategory-field-container').appendChild(subcategoryField);
+
+        const subcategorySelect = document.querySelector(`[data-depth="${response.depth}"]`);
+        response.subcategories.map(function (subcategory) {
+            const option = document.createElement('option');
+            option.value = subcategory.pk;
+            option.innerText = subcategory.name;
+            subcategorySelect.appendChild(option);
+        });
+
+        subcategorySelect.addEventListener('change', function (event) {
+            const categoryPk = event.target.value;
+            if (categoryPk !== '' & categoryPk !== '-1') {
+                const url = '{% url 'pawnshop:subcategory_list_ajax' %}' + '?subcategory_pk=' + categoryPk;
+                sendAjaxRequest(url);
+            }
+            if (categoryPk == '-1') {
+                subcategoryField.innerHTML = `
+                    <label for="id_subcategory">Подкатегория<span class="required-indicator"> *</span></label>
+                    <input type="text" name="subcategory" class="form-control" placeholder="Введите подкатегорию" required="" id="id_name">
+                `;
+            }
+        });
+
+        const pledge_form_ = document.querySelector(
+    }
+
+    function clearSubcategoryFields (current_depth) {
+        for (let depth = current_depth; depth <= maxDepth; depth++) {
+            document.querySelectorAll('.form-group-' + depth).forEach(function (formGroup) {
+                formGroup.remove();
+            });
+        }
+    }
+</script>

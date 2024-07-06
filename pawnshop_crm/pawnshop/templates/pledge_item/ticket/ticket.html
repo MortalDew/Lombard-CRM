@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+
+{% block content %}
+<style>
+   .ticket_list {
+        font-size: 12px;
+        margin: 0px;
+   }
+    .ticket_text{
+        font-size: 12px;
+    }
+
+    tr {
+      font-size: 12px;
+    }
+    body {
+        width: 1024px;
+    }
+</style>
+<div class="d-flex justify-content-between mt-5">
+    <img src="{% static 'img/ticket_logo.jpg' %}" alt="logo">
+    <h4 class="text-center">ЗАЛОГОВЫЙ БИЛЕТ No {{ loan.pk }}</h4>
+    <p>
+        г.Алматы
+        <br>{{ loan.created_at }}
+    </p>
+</div>
+<div class="container text-justify mt-3">
+
+    <p class="ticket_text">
+        {{ loan.client.last_name }} {{ loan.client.first_name }} , именуемый(ая) в дальнейшем "Залогодатель", удостоверение личности/паспорт №{{ loan.client.confirm_document.serial_number }}
+        выдан(о) {{ loan.client.confirm_document.given_by }} от {{ loan.client.confirm_document.given_at }}, ИИН {{ loan.client.confirm_document.iin }}, с одной стороны, и ТОО "REAL ЛОМБАРД", именуемое в дальнейшем
+        "Залогодержатель", в лицедиректора Человеков Р.Б., действующего на основании приказа №2 от 20.11.2011 г., с другой
+        стороны, далее именуемые "Стороны", а поотдельности - "Сторона", заключили настоящий Залоговый билет о
+        нижеследующем:
+    </p>
+    <div>
+        <p class="ticket_list">1.Залогодержатель передает на срочной возмездной основе денежные средства (краткосрочный займ) Залогодателю, Залогодатель передает Залогодержателю в залог нижеследующее имущество:</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">№ п/п</th>
+                        <th scope="col">Залоговое имущество</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pledge_item in loan.pledge_items.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ pledge_item.name }}; {{ pledge_item.description }} - {{ pledge_item.price }} руб.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th scope="col" class="w-50">ЗАЛОГОДЕРЖАТЕЛЬ</th>
+                <th scope="col">ЗАЛОГОДАТЕЛЬ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    ФИО: {{ loan.client.last_name }} {{ loan.client.first_name }}
+                    <br>Адрес проживания: {{ loan.client.location }}, {{ loan.client.street }}, {{ loan.client.house_number }}, {{ loan.client.apartment_number }}
+                    <br>ИИН: {{ loan.client.confirm_document.iin }}
+                    <br>уд./л. (паспорт): №{{ loan.client.confirm_document.serial_number }}  выдан(о) {{ loan.client.confirm_document.given_by }}  от {{ loan.client.confirm_document.given_at }}
+                    <br>тел.: {{ loan.client.phone }}
+                    <p class="text-center pt-4">Залогодатель _______________________________ {{ loan.client.last_name }} {{ loan.client.first_name }}
+
+                    </p>
+                </th>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

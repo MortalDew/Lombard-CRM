@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+{% block heading %}
+    Добавить документ
+{% endblock %}
+
+{% block content %}
+    <div class="form-wrapper">
+        <form action="{% url 'pawnshop:confirm_document_create' client_pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'partials/_form.html' %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-dark btn-sm">Добавить документ</button>
+            </div>
+        </form>
+    </div>
+    {% include 'partials/_datepicker_script.html' with field_id='given_at' %}
+{% endblock %}

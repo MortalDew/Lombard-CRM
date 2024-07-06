@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+{% block heading %}
+    Выбор клиента
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-between">
+        <div class="col-5">
+            <div class="form-group">
+                <input name="client_search_input" type="text" class="form-control" id="client_search_input" placeholder="Поиск клиента">
+                <div class="client-container-wrapper empty">
+                    <div class="client-container"></div>
+                    <div class="spinner-wrapper">
+                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                    <div class="no-content">
+                        <p class="no-content-text">Ничего не найдено</p>
+                    </div>
+                </div>
+                {% if recent_client %}
+                    <div class="recent-client-wrapper">
+                        <h5 class="recent-client-heading">Добавленный клиент</h5>
+                        <div class="client-item" data-client_pk="{{ recent_client.pk }}">
+                            <div class="client-item-name">
+                                <span>{{ recent_client.last_name }} {{ recent_client.first_name }} {% if recent_client.middle_name %}{{ recent_client.middle_name }}{% endif %}</span>
+                            </div>
+                            <div class="client-item-detail-container">
+                                <p class="client-item-detail"><span class="bold-text">• Дата рождения:</span> {{ recent_client.birth_date }}</p>
+                                <p class="client-item-detail"><span class="bold-text">• ИИН:</span> {{ recent_client.confirm_document.iin }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="client-select-form-wrapper">
+                    <div class="form-group">
+                        <label>Клиент<span class="required-indicator"> *</span></label>
+                    </div>
+                    <div class="selected-client-item-wrapper">
+                        <div class="no-content">
+                            <p class="no-content-text">Клиент не выбран</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a href="{% url 'pawnshop:client_choose' %}" id="client_choose_btn" class="btn btn-dark btn-sm disabled">Выбрать клиента</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <form action="{% url 'pawnshop:client_create' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'partials/_form.html' %}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark btn-sm">Добавить клиента</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% include 'partials/_client_search_script.html' %}
+    {% include 'partials/_client_add_script.html' %}
+    {% include 'partials/_datepicker_script.html' with field_id='birth_date' %}
+{% endblock %}

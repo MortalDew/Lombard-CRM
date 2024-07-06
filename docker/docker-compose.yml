@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  django:
+    image: qwanysh/lombard_crm
+    command: bash -c 'python3 pawnshop_crm/manage.py collectstatic --noinput && python3 pawnshop_crm/manage.py migrate && cd pawnshop_crm && gunicorn -c gunicorn.conf pawnshop_crm.wsgi'
+    volumes:
+      - ./gunicorn.conf:/src/pawnshop_crm/gunicorn.conf
+      - ./static:/src/pawnshop_crm/static
+    ports:
+      - 8000:8000

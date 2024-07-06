@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Lombard CRM
+{% endblock %}
+
+{% block heading %}
+    Добавление предмета залога
+{% endblock %}
+
+{% block content %}
+    <div class="form-wrapper">
+        <form action="{% url 'pawnshop:pledge_item_create' client_pk %}" method="post" enctype="multipart/form-data" id="form">
+            {% csrf_token %}
+            {% include 'partials/_form.html' %}
+            <div class="subcategory-field-container"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-dark btn-sm">Добавить предмет залога</button>
+                <a href="#" class="btn btn-danger btn-sm mt-1">Это фейк</a>
+            </div>
+        </form>
+    </div>
+    {% include 'partials/_client_subcategory_script.html' %}
+{% endblock %}
